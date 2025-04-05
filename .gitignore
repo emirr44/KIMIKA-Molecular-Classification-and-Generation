@@ -172,3 +172,17 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Ignore all data files
+data/raw/
+data/processed/
+
+# Ignore large files/extensions common in QM9
+*.xyz
+*.sdf
+*.hdf5
+*.npy
+*.pkl
+
+# Ignore model checkpoints
+models/
