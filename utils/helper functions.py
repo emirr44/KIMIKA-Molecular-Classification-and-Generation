@@ -7,7 +7,3 @@ def cloneRepository(repositoryURL, destination):
     except subprocess.CalledProcessError as e:
         print(f"Error cloning repository: {e}")
 
-
-repositoryURL = "https://github.com/tencent-ailab/grover.git"
-destination = "./cloned repository"
-cloneRepository(repositoryURL, destination)
