@@ -1,4 +1,4 @@
-<details> <summary>Click to Expand the Markdown Content to Paste</summary># Data Schema: Augmented BACE Dataset
+<details> <summary>Click to Expand the Data Schema Content</summary># Data Schema: Augmented BACE Dataset
 
 ---
 
