@@ -1,7 +1,9 @@
+<details> <summary>Click to Expand the Data Schema Content</summary>
+
 ---
 
 ````markdown
-# DATA_SCHEMA.md
+# Data Schema: Augmented BACE Dataset
 
 ## 1. Overview
 
@@ -96,6 +98,7 @@ augmented_bace_graphs.pt  <--- Indexed using aug_train_idx.pkl, etc.
 ---
 
 **Last Updated**: May 31, 2025
+
 **Author**: Amir Sarajlić
 
-```
+```</details>
