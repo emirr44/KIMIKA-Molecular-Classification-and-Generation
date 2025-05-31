@@ -1,6 +1,5 @@
-<details> <summary>Click to Expand the Data Schema Content</summary>
-
----
+<details>
+<summary>Click to Expand the Data Schema</summary>
 
 ````markdown
 # Data Schema: Augmented BACE Dataset
@@ -37,10 +36,11 @@ Each molecule is converted into a `torch_geometric.data.Data` object representin
 | Is in ring            | Boolean                            |
 
 ### Example Graph Object
+
 ```python
 >>> data
 Data(x=[21, 6], edge_index=[2, 44], edge_attr=[44, 3])
-````
+`````
 
 This example shows a molecule with:
 
@@ -101,4 +101,4 @@ augmented_bace_graphs.pt  <--- Indexed using aug_train_idx.pkl, etc.
 
 **Author**: Amir Sarajlić
 
-```</details>
+````
