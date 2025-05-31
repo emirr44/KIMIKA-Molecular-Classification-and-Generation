@@ -1,77 +1,101 @@
-<details> <summary>Click to Expand the Data Schema Content</summary># Data Schema: Augmented BACE Dataset
+---
+
+````markdown
+# DATA_SCHEMA.md
+
+## 1. Overview
+
+This document outlines the schema and structure of all files produced during the BACE data augmentation process for use with graph neural networks (GNNs).
 
 ---
 
-## 1. Input Files
+## 2. Graph Data Format
 
-### `bace.csv`
-- **Columns**:
-  - `mol` (string): Canonical SMILES of a BACE inhibitor.
-  - `pIC50` (float): Bioactivity value (log IC<sub>50</sub>).
-  - `Class` (int): Binary label (0 = inactive, 1 = active).
+Each molecule is converted into a `torch_geometric.data.Data` object representing a graph:
 
----
+- `x`: Node feature matrix — one row per atom.
+- `edge_index`: Connectivity matrix — stores bidirectional edges.
+- `edge_attr`: Edge feature matrix — one row per bond (bidirectional).
 
-## 2. Augmentation Metadata
+### Atom Features (`x`)
+| Feature               | Description                        |
+|-----------------------|------------------------------------|
+| Atomic number         | Integer ID for each element        |
+| Degree                | Number of connected atoms          |
+| Formal charge         | Net atomic charge                  |
+| Hybridization (enum)  | sp, sp2, sp3...                    |
+| Total Hydrogens       | Number of H atoms                  |
+| Is Aromatic           | Boolean (0 or 1)                   |
 
-### `augmented_bace_smiles.csv`
-| Column             | Description                                                      |
-|--------------------|------------------------------------------------------------------|
-| `original_smiles`  | Original (canonical) SMILES                                      |
-| `augmented_smiles` | Augmented SMILES (random or tautomer)                            |
-| `augmentation_type`| One of `original`, `random_smiles`, or `tautomer`                |
-| `split`            | Assigned partition: `train`, `val`, or `test`                     |
+### Bond Features (`edge_attr`)
+| Feature               | Description                        |
+|-----------------------|------------------------------------|
+| Bond type             | Single, double, triple             |
+| Is conjugated         | Boolean                            |
+| Is in ring            | Boolean                            |
 
----
+### Example Graph Object
+```python
+>>> data
+Data(x=[21, 6], edge_index=[2, 44], edge_attr=[44, 3])
+````
 
-## 3. Graph Files
+This example shows a molecule with:
 
-### `baseline_graphs.pt`
-- **Type**: `List[torch_geometric.data.Data]`
-- **Size**: 1,513 entries (one per original SMILES)
-- **Node Features (`x`)**:  
-  - Shape: `[num_atoms, 6]`  
-  - Columns:  
-    1. Atomic number (int)  
-    2. Atom degree (int)  
-    3. Formal charge (int)  
-    4. Hybridization (int code)  
-    5. Number of implicit H atoms (int)  
-    6. Is aromatic (0/1)  
-- **Edge Index (`edge_index`)**:  
-  - Shape: `[2, num_edges]`  
-  - Each column → (source, target)  
-- **Edge Attributes (`edge_attr`)**:  
-  - Shape: `[num_edges, 3]`  
-  - Columns:  
-    1. Bond type (as double)  
-    2. Is conjugated (0/1)  
-    3. Is in ring (0/1)  
-
-### `augmented_bace_graphs.pt`
-- **Type**: `List[torch_geometric.data.Data]`
-- **Size**: 12,721 entries (augmented + original)
-- **Features**: Same schema as `baseline_graphs.pt`.
-- **Index Alignment**: Position in this list corresponds to rows in `augmented_bace_smiles.csv`.
+* **21 atoms**
+* **22 bonds** (44 directional edges)
+* **6 atom features**
+* **3 bond features**
 
 ---
 
-## 4. Split Index Files
+## 3. File Summary
 
-- `aug_train_idx.pkl`  
-- `aug_val_idx.pkl`  
-- `aug_test_idx.pkl`  
+| File Name                   | Format  | Description                                     |
+| --------------------------- | ------- | ----------------------------------------------- |
+| `augmented_bace_smiles.csv` | CSV     | All original + augmented SMILES                 |
+| `baseline_graphs.pt`        | PyTorch | Graphs from original (unaugmented) molecules    |
+| `augmented_bace_graphs.pt`  | PyTorch | Graphs for all augmented SMILES                 |
+| `aug_train_idx.pkl`         | Pickle  | Indices of augmented graphs in training split   |
+| `aug_val_idx.pkl`           | Pickle  | Indices of augmented graphs in validation split |
+| `aug_test_idx.pkl`          | Pickle  | Indices of augmented graphs in test split       |
 
-Each is a pickled Python list of integer indices referencing entries in `augmented_bace_graphs.pt`.
+---
+
+## 4. Dataset Statistics
+
+| Type             | Count  |
+| ---------------- | ------ |
+| Original SMILES  | 1,513  |
+| Augmented SMILES | 12,721 |
+| Total Graphs     | 12,721 |
+| Train Graphs     | 10,759 |
+| Val Graphs       | 995    |
+| Test Graphs      | 967    |
 
 ---
 
-## 5. Notes & Conventions
+## 5. Data Flow Diagram
 
-- All augmented SMILES were **validated** with RDKit’s `Chem.MolFromSmiles()`.
-- No `NaN` or missing features exist in final graphs.
-- 3D coordinates were **not** used in this version (position arrays absent).
-- Hybridization codes and bond types follow RDKit enums.
+```text
+Raw SMILES (bace.csv)
+        ↓
+[Cleaned + Validated]
+        ↓
++-------------------------------+
+|  Augmentation (random, taut) |
++-------------------------------+
+        ↓
+augmented_bace_smiles.csv
+        ↓
+smiles_to_graph()
+        ↓
+augmented_bace_graphs.pt  <--- Indexed using aug_train_idx.pkl, etc.
+```
 
 ---
-</details>
+
+**Last Updated**: May 31, 2025
+**Author**: Amir Sarajlić
+
+```
