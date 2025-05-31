@@ -53,6 +53,10 @@
 - **Size**: 12,721 entries (augmented + original)
 - **Features**: Same schema as `baseline_graphs.pt`.
 - **Index Alignment**: Position in this list corresponds to rows in `augmented_bace_smiles.csv`.
+### Example Graph Object
+```python
+>>> data
+Data(x=[21, 6], edge_index=[2, 44], edge_attr=[44, 3])
 
 ---
 
@@ -72,6 +76,20 @@ Each is a pickled Python list of integer indices referencing entries in `augment
 - No `NaN` or missing features exist in final graphs.
 - 3D coordinates were **not** used in this version (position arrays absent).
 - Hybridization codes and bond types follow RDKit enums.
+
+
+---
+
+## 6. Data Flow Diagram`
+
+**How to format**:
+
+```markdown
+CSV Row (augmented_bace_smiles.csv)
+      ↓
+Graph Object (Data(x, edge_index, edge_attr))
+      ↓
+Indexed via aug_train_idx.pkl → used in GNN
 
 ---
 </details>
