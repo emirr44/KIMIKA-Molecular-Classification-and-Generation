@@ -39,14 +39,13 @@ Each molecule is converted into a `torch_geometric.data.Data` object representin
 | Is conjugated         | Boolean                            |
 | Is in ring            | Boolean                            |
 
-````
 
 ### Example Graph Object
 
 ```python
 >>> data
 Data(x=[21, 6], edge_index=[2, 44], edge_attr=[44, 3])
-`````
+```
 
 This example shows a molecule with:
 
