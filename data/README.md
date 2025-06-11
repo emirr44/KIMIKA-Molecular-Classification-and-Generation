@@ -67,6 +67,8 @@ This example shows a molecule with:
 | `aug_val_idx.pkl`           | Pickle  | Indices of augmented graphs in validation split |
 | `aug_test_idx.pkl`          | Pickle  | Indices of augmented graphs in test split       |
 
+You can access this file [here](https://drive.google.com/drive/folders/1e8gsnhkNpFcfQnZoSztilspu0xJBnH0L?usp=sharing)
+
 ---
 
 ## Dataset Statistics
