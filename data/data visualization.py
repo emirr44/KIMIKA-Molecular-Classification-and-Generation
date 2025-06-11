@@ -3,6 +3,7 @@ import seaborn as sns
 from collections import Counter
 from rdkit import Chem
 from rdkit.Chem import Descriptors
+import pandas as pd
 
 sns.set(style="whitegrid")
 
@@ -49,6 +50,26 @@ def print_top_atom_types(df, smiles_col='mol', top_n=10):
     for atom, count in common_atoms:
         print(f"{atom}: {count}")
     return common_atoms
+
+def plot_descriptor_correlation_heatmap(df):
+    def calc_descriptors(smiles):
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            return [None, None, None]
+        return [
+            Descriptors.MolWt(mol),
+            Descriptors.MolLogP(mol),
+            Descriptors.NumRotatableBonds(mol)
+        ]
+
+    desc = df['mol'].apply(calc_descriptors)
+    desc_df = pd.DataFrame(desc.tolist(), columns=['MolWt', 'LogP', 'RotBonds'])
+    desc_df = desc_df.dropna()
+    corr = desc_df.corr()
+
+    sns.heatmap(corr, annot=True, cmap='coolwarm')
+    plt.title("Descriptor Correlation Heatmap")
+    plt.show()
 
 def plot_atom_types(common_atoms):
     atoms, counts = zip(*common_atoms)
