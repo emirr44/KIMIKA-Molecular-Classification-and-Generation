@@ -4,6 +4,7 @@ Both classification and molecule generation codes in this project rely on same d
 
 '''wget -O bace.csv https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/bace.csv
 mkdir -p ./molecule_datasets/bace/raw
-mv bace.csv ./molecule_datasets/bace/raw/bace.csv'''
+mv bace.csv ./molecule_datasets/bace/raw/bace.csv
+'''
 
 Since mentioned dataset is realtively small (~1513 molecules)
