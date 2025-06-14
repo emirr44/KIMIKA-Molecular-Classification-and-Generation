@@ -1,7 +1,7 @@
 # Molecular Graph Representation and Classification 
 
-This repository provides the source code for fine tuning pretrained Graph Neural Network (GraphMVP) for molecular 
-classification and utilizes Variational Autoencoder to generate novel molecules from SMILES strings. The goal is to
+This repository provides the source code for fine tuning pretrained Graph Neural Network (GraphMVP) for __molecular 
+classification__ and utilizes Variational Autoencoder to __generate novel molecules__ from SMILES strings. The goal is to
 apply deep learning for drug discovery; we predict β-secretase (BACE1) inhibitor activity (classification) and explore 
 new compound structures (generation). The classification task helps identify potential drug candidates, while the
 generative model allows de novo design of novel molecules. Screening vast chemical libraries is quite expensive, and
