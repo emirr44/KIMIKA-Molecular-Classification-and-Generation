@@ -50,7 +50,6 @@ Each molecule is converted into a `torch_geometric.data.Data` object representin
 ### Example Graph Object
 
 ```python
->>> data
 Data(x=[21, 6], edge_index=[2, 44], edge_attr=[44, 3])
 ```
 
