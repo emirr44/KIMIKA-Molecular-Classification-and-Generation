@@ -102,7 +102,7 @@ torch.save(aug_graphs, 'augmented_bace_graphs.pt')
 pd.DataFrame(failed_smiles, columns=["failed_smiles"]).to_csv("failed_augmented_smiles.csv", index=False)
 
 print("Graph Conversion Complete:")
-print(f"✔Total SMILES input: {len(aug_df)}")
+print(f"Total SMILES input: {len(aug_df)}")
 print(f"Successfully converted: {len(aug_graphs)}")
 print(f"Failed to convert: {len(failed_smiles)}")
 
