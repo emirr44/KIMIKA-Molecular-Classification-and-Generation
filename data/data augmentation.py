@@ -81,7 +81,7 @@ for original_smiles in df['mol']:
 aug_df = pd.DataFrame(augmented_rows, columns=['original_smiles', 'augmented_smiles', 'augmentation_type'])
 aug_df.to_csv('augmented_bace_smiles.csv', index=False)
 
-print("✅ SMILES Augmentation Complete:")
+print("SMILES Augmentation Complete:")
 print(f"Originals: {len(df)}")
 print(f"Augmented (total): {len(aug_df)}")
 print(aug_df['augmentation_type'].value_counts())
@@ -101,10 +101,10 @@ for s in aug_df['augmented_smiles']:
 torch.save(aug_graphs, 'augmented_bace_graphs.pt')
 pd.DataFrame(failed_smiles, columns=["failed_smiles"]).to_csv("failed_augmented_smiles.csv", index=False)
 
-print("✅ Graph Conversion Complete:")
-print(f"✔️  Total SMILES input: {len(aug_df)}")
-print(f"✅ Successfully converted: {len(aug_graphs)}")
-print(f"❌ Failed to convert: {len(failed_smiles)}")
+print("Graph Conversion Complete:")
+print(f"✔Total SMILES input: {len(aug_df)}")
+print(f"Successfully converted: {len(aug_graphs)}")
+print(f"Failed to convert: {len(failed_smiles)}")
 
 # --- Scaffold Split ---
 
@@ -132,7 +132,7 @@ def assign_split(orig_smiles):
 
 aug_df['split'] = aug_df['original_smiles'].apply(assign_split)
 
-print("✅ Split Summary:")
+print("Split Summary:")
 print(aug_df['split'].value_counts())
 
 train_idx = aug_df[aug_df['split'] == 'train'].index.tolist()
@@ -146,17 +146,17 @@ with open('aug_val_idx.pkl', 'wb') as f:
 with open('aug_test_idx.pkl', 'wb') as f:
     pickle.dump(test_idx, f)
 
-print("🔍 Unique splits:", aug_df['split'].unique())
+print("Unique splits:", aug_df['split'].unique())
 grouped = aug_df.groupby('original_smiles')['split'].nunique()
 leaked = grouped[grouped > 1]
-print(f"🔍 Leaking original SMILES: {len(leaked)}")
-print("📊 Split distribution:")
+print(f"Leaking original SMILES: {len(leaked)}")
+print("Split distribution:")
 print(aug_df['split'].value_counts())
 mismatch = aug_df[aug_df['split'] != aug_df.groupby('original_smiles')['split'].transform('first')]
-print(f"❌ Mismatched augmentations: {len(mismatch)}")
-print("🧪 Scaffold NaNs:", aug_df['scaffold'].isna().sum())
+print(f"Mismatched augmentations: {len(mismatch)}")
+print("Scaffold NaNs:", aug_df['scaffold'].isna().sum())
 
 aug_df.to_csv('augmented_bace_smiles.csv', index=False)
-print("💾 Saved: augmented_bace_smiles.csv")
+print("Saved: augmented_bace_smiles.csv")
 
 shutil.make_archive('bace_data_aug', 'zip', './') 
