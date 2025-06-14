@@ -1,6 +1,12 @@
 # Dataset
 
-Both classification and molecule generation codes in this project rely on same dataset, bace.csv. The BACE dataset focuses on inhibitors of human beta-secretase 1 (BACE-1). It includes both quantitative (IC50 values) and qualitative (binary labels) binding results.
+We use the BACE dataset from MoleculeNet, which contains small-molecule inhibitors of human β-secretase 1
+
+Key points:
+- **Data content** - 1,513 unique molecules (SMILES) with binary labels (1 = active inhibitor, 0 = inactive). The raw data also includes IC50 values, but we use only the binary labels for classification.
+- **Importance** - BACE is a validated drug target in Alzheimer’s research. Inhibiting BACE can potentially reduce amyloid plaque formation
+- **Preprocessing** - We convert SMILES strings to graph representations. Each atom is featurized by its element type, chirality, and other one-hot features; each bond is encoded by type and aromaticity.
+- **Train/Val/Test split** - We adopt a scaffold split to simulate realistic conditions (training, validation, and test share no common scaffolds) Scaffold splitting, according to the MoleculeNet protocol for molecular property prediction, is recommended for BACE since it enforces domain generalization.
 
 # Download Instructions
 
@@ -10,7 +16,8 @@ mkdir -p ./molecule_datasets/bace/raw
 mv bace.csv ./molecule_datasets/bace/raw/bace.csv
 ```
 
-Since mentioned dataset is realtively small (~1513 molecules), for successful training, and to prevent overfitting, data augmentation was necessary. 
+Since mentioned dataset is realtively small (~1513 molecules), for successful training, and to prevent overfitting, data augmentation was necessary. You can access file with augmented dataset, baseline graphs and more [here](https://drive.google.com/drive/folders/1e8gsnhkNpFcfQnZoSztilspu0xJBnH0L?usp=sharing)
+
 
 ---
 
@@ -53,24 +60,6 @@ This example shows a molecule with:
 * **22 bonds** (44 directional edges)
 * **6 atom features**
 * **3 bond features**
-
----
-
-## File Summary
-
-| File Name                   | Format  | Description                                     |
-| --------------------------- | ------- | ----------------------------------------------- |
-| `augmented_bace_smiles.csv` | CSV     | All original + augmented SMILES                 |
-| `baseline_graphs.pt`        | PyTorch | Graphs from original (unaugmented) molecules    |
-| `augmented_bace_graphs.pt`  | PyTorch | Graphs for all augmented SMILES                 |
-| `aug_train_idx.pkl`         | Pickle  | Indices of augmented graphs in training split   |
-| `aug_val_idx.pkl`           | Pickle  | Indices of augmented graphs in validation split |
-| `aug_test_idx.pkl`          | Pickle  | Indices of augmented graphs in test split       |
-
-
-
-You can access this file [here](https://drive.google.com/drive/folders/1e8gsnhkNpFcfQnZoSztilspu0xJBnH0L?usp=sharing)
-
 
 ---
 
