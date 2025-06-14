@@ -60,7 +60,6 @@ This example shows a molecule with:
 * **6 atom features**
 * **3 bond features**
 
----
 
 ## Dataset Statistics
 
@@ -73,7 +72,6 @@ This example shows a molecule with:
 | Val Graphs       | 995    |
 | Test Graphs      | 967    |
 
----
 
 ## Data Flow Diagram
 
