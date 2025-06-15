@@ -72,21 +72,3 @@ This example shows a molecule with:
 | Val Graphs       | 995    |
 | Test Graphs      | 967    |
 
-
-## Data Flow Diagram
-
-```text
-Raw SMILES (bace.csv)
-        ↓
-[Cleaned + Validated]
-        ↓
-+-------------------------------+
-|  Augmentation (random, taut) |
-+-------------------------------+
-        ↓
-augmented_bace_smiles.csv
-        ↓
-smiles_to_graph()
-        ↓
-augmented_bace_graphs.pt  <--- Indexed using aug_train_idx.pkl, etc.
-```
