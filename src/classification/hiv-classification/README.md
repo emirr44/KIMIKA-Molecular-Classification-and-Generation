@@ -1,4 +1,4 @@
-# HIV Classification - how to train the model
+# HIV Classification - how to train the model on the HIV dataset
 
 ## Step 1: Moving everything to Google Colab
 
@@ -14,11 +14,11 @@ When running the part of code from `model.py` after pasting this into the notebo
 ```
 from preprocessing import getGraphEmbeddings
 ```
-which will require installing the ***preprocessing*** library into Colab.
+which will require installing the ***preprocessing*** library into Colab. However, we just used the direct implementation of the function we need.
 
 ## Step 2: The problem with importing *getGraphEmbeddings*
 
-The ***processing*** library is obsolete when trying to install it on Colab. For that reason, it's better to use a direct implementation of *getGraphEmbeddings* function with 3 parameters. The implementation can be found in the `processing.py` file. Paste *getGraphEmbeddings* before pasting the code from `model.py`.
+The ***preprocessing*** library is obsolete when trying to install it on Colab. For that reason, it's better to use a direct implementation of *getGraphEmbeddings* function with 3 parameters. The implementation can be found in the `preprocessing.py` file in the repository (**helper-functions** folder). Paste *getGraphEmbeddings* before pasting the code from `model.py`.
 
 ## Step 3: Cleaning the dataset
 
@@ -46,9 +46,27 @@ Out of 41127 instances in `hiv.csv`, 7 of them failed and because of that, the v
 | gnn_embeddings.pt | 41120     |
 | hiv_cleaned.csv   | 41120     |
 
-After finding and cleaning the dataset, from the *clean_hiv* function in `hiv_classification.py`
+The classification will be done on the **HIV_active** column, using `hiv_cleaned.csv` and `gnn_embeddings.pt`. After finding and cleaning the dataset, from the *clean_hiv* function in `hiv_classification.py`, the following 7 molecules will be removed
 
-The classification will be done on the **HIV_active** column, using `hiv_cleaned.csv` and `gnn_embeddings.pt`.
+>Found 7 failed molecules:  
+>1. O=C1O[Al]23(OC1=O)(OC(=O)C(=O)O2)OC(=O)C(=O)O3  
+>2. Cc1ccc([B-2]2(c3ccc(C)cc3)=NCCO2)cc1  
+>3. Oc1ccc(C2Oc3cc(O)cc4c3C(=[O+][AlH3-3]35([O+]=C6c7c(cc(O)cc7[OH+]3)OC(c3ccc(O)cc3O)C6O)([O+]=C3c6c(cc(O)cc6[OH+]5)OC(c5ccc(O)cc5O)C3O)[OH+]4)C2O)c(O)c1  
+>4. CC1=C2[OH+][AlH3-3]34([O+]=C2C=CN1C)([O+]=C1C=CN(C)C(C)=C1[OH+]3)[O+]=C1C=CN(C)C(C)=C1[OH+]4  
+>5. CC(c1cccs1)=[N+]1[N-]C(N)=[S+][AlH3-]12[OH+]B(c1ccccc1)[OH+]2  
+>6. CC(c1ccccn1)=[N+]1[N-]C(N)=[S+][AlH3-]12[OH+]B(c1ccccc1)[OH+]2  
+>7. [Na+].c1ccc([SH+][GeH2+]2[SH+]c3ccccc3[SH+]2)c([SH+][GeH2+]2[SH+]c3ccccc3[SH+]2)c1  
+
+>Saved cleaned dataset to 'hiv_cleaned.csv'  
+>Original count: 41127, Cleaned count: 41120
+
+and the dataset is ready to be handled.
+
+## Step 4: Classification
+
+In `hiv_classification.py` two types of classification tasks are done: a Random Forest Classifier evaluating 6 metrics, including a confusion matrix, and a simple neural network. The results of these classification tasks are in the [main README](https://github.com/emirr44/QUARK-Molecule-Generating-AI-Model) of this repository.
+
+
 
 
 
