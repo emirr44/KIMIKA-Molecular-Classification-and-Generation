@@ -111,7 +111,7 @@ Key Elements:
 
 The plot shows:
 - Partial Separation: some overlap in the middle (around 0.2-0.8) means the model struggles with some cases. The "hump" around 0.5 suggests uncertain predictions
-- Class Performance:
+Class Performance:
  - Class 1 (orange) has a wider spread, indicating that some true positives are correctly predicted with high probability (>0.6), but many are predicted with medium probability (~0.3-0.7)
  - Class 0 (blue) shows a concentration near 0 (good) but a long tail toward higher probabilities (false positives)
 
