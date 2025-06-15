@@ -7,6 +7,9 @@ new compound structures (generation). The classification task helps identify pot
 generative model allows de novo design of novel molecules. Screening vast chemical libraries is quite expensive, and
 AI offers cost-effective way to explore existing and even propose new molecules, learning patters unseen by humans.
 
+The model was first tested on the HIV database consisted of 41127 SMILES strings which were labeled as *HIV active* (class 1) or *HIV inactive* (class 0).
+The dataset is very imbalanced, with 39684 of the instances being in class **0** while only 1443 are labeled **1**. The steps for training the model on hiv.csv dataset are listed in the src/classification/hiv_classification folder.
+
 ## Attention
 
 This project adapts and uses code from [Shengchao Liu's repository] (https://github.com/chao1224/GraphMVP), which is licensed under the MIT License. List of references can be found in text file in src file
@@ -41,6 +44,81 @@ To gain more comprehensive understanding of GraphMVP, reader should visit their 
     ```
 - Clone repository and merge with GraphMVP
 
+# Results
+
+## BACE Classification
+
+**Results without weights:**
+|EPOCH   | TRAIN LOSS | VAL ACCURACY |
+|--------|------------|--------------|
+| 1	| 0.7033	| 0.5400|
+| 2	| 0.6672	| 0.6814|
+| 3	| 0.6545	| 0.6703|
+| 4	| 0.6363	| 0.6063|
+| 5	| 0.6324	| 0.6795|
+| 6	| 0.6239	| 0.7183|
+| 7	| 0.6120	| 0.7023|
+| 8	| 0.6077	| 0.7215|
+| 9	| 0.5993	| 0.7142|
+| 10 | 0.5926	| 0.7263|  
+Test accuracy: 0.7867
+
+**Results with weights:**
+|EPOCH   | TRAIN LOSS | VAL ACCURACY |
+|--------|------------|--------------|
+| 1 | 0.7158 | 0.5275|
+| 2 | 0.6743 | 0.5581|
+| 3 | 0.6252 | 0.5308|
+| 4 | 0.6122 | 0.5517|
+| 5 |  0.5812 | 0.6021|
+| 6 | 0.5855 | 0.5932|
+| 7 |  0.5556 | 0.5845|
+| 8 |  0.5689 | 0.5680|
+| 9 | 0.5570 |  0.7085|
+| 10 | 0.5533 | 0.7139|  
+Test accuracy: 0.8446
+
+## HIV Classification
+
+As described in the README in src/classification/hiv-classification
+
+### Random Forest Classifier
+
+![ROC curve - Random Forest](fig/randomforest_hiv_roc_curve.png)
+
+AUC = 0.55 - Random guessing would yield an AUC of 0.5 (diagonal line).
+
+The model's performance (0.55) is just 5% better than random chance, indicating very weak discriminatory power.
+
+Shape of the ROC Curve - The curve appears close to the diagonal (random classifier), with no significant "hump" toward the top-left corner (which would indicate strong performance). The slight deviation from the diagonal suggests minimal predictive capability.
+
+![Probability distribution curve - Random Forest](fig/randomforest_hiv_probability_distribution_curve.png)
+
+Key Elements:
+1. X-axis (Predicted Probability [Class 1]):
+ - Shows the model's confidence scores (0 to 1) that a sample belongs to Class 1
+ - 0 = Definitely Class 0
+ - 1 = Definitely Class 1
+ - 0.5 = Unsure
+
+2. Y-axis (Density):
+ - Shows how frequently each probability occurs
+ - Higher peaks = more samples with those probabilities
+
+3. Color-coded Curves:
+ - Blue (Class 0): Actual negative cases
+ - Orange (Class 1): Actual positive cases
+
+The plot shows:
+- Partial Separation: some overlap in the middle (around 0.2-0.8) means the model struggles with some cases. The "hump" around 0.5 suggests uncertain predictions
+- Class Performance:
+ - Class 1 (orange) has a wider spread, indicating that some true positives are correctly predicted with high probability (>0.6), but many are predicted with medium probability (~0.3-0.7)
+ - Class 0 (blue) shows a concentration near 0 (good) but a long tail toward higher probabilities (false positives)
+
+![Confusion matrix - Random Forest](fig/randomforest_hiv_confusion_matrix.png)
+
+This confusion matrix shows that more than 1/3 of the inactive HIV instances are incorrectly classified as well as the Random Forest having difficulties classifying  HIV active instances at all. However, it was easily anticipated that the active instances would ose a problem due to the imbalance in the dataset.
+
 # Conclusion
 
 In this project, we created a dual-model pipeline for drug discovery, including a fine-tuned GraphMVP GNN that achieves strong classification accuracy on the BACE inhibitor dataset, leveraging pre-trained 3D-enhanced embeddings and a SMILES-based VAE that is supposed to generate diverse, valid molecules by exploring the learned latent space.
@@ -49,4 +127,4 @@ Even though we failed to create accurate models, we set up basis for meaningful 
 
 There are many extensions possible. We could incorporate multi-task learning or additional properties (solubility, toxicity) into GraphMVP fine-tuning. For the VAE, we could experiment with graph-based decoders (like JT-VAE) to improve validity. Conditional generation (e.g. target-specific VAEs) or integrating a property predictor into training could direct the search toward more potent inhibitors.
 
-However, for now, we conclude that we successfully demonstrated how GNNs and VAEs can be used in future drug discovery, but more generally, in progress of Artificial Intelligence
+However, for now, we conclude that we successfully demonstrated how GNNs and VAEs can be used in future drug discovery, but more generally, in progress of Artificial Intelligence.
