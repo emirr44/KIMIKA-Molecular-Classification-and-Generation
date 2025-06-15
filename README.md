@@ -2,10 +2,9 @@
 
 This repository provides the source code for fine tuning pretrained Graph Neural Network (GraphMVP) for __molecular 
 classification__ and utilizes Variational Autoencoder to __generate novel molecules__ from SMILES strings. The goal is to
-apply deep learning for drug discovery; we predict β-secretase (BACE1) inhibitor activity (classification) and explore 
-new compound structures (generation). The classification task helps identify potential drug candidates, while the
-generative model allows de novo design of novel molecules. Screening vast chemical libraries is quite expensive, and
-AI offers cost-effective way to explore existing and even propose new molecules, learning patters unseen by humans.
+apply deep learning for drug discovery; we predict β-secretase (BACE1), inhibitor activity (classification), explore 
+new compound structures (generation), and predict HIV activity on SMILES strings (classification). The classification task helps identify potential drug candidates, while the generative model allows de novo design of novel molecules. Screening vast chemical libraries is quite expensive, and
+AI offers cost-effective way to explore existing and even propose new molecules, learning patterns unseen by humans.
 
 The model was first tested on the HIV database consisted of 41127 SMILES strings which were labeled as *HIV active* (class 1) or *HIV inactive* (class 0).
 The dataset is very imbalanced, with 39684 of the instances being in class **0** while only 1443 are labeled **1**. The steps for training the model on hiv.csv dataset are listed in the src/classification/hiv_classification folder.
