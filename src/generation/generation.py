@@ -126,7 +126,7 @@ best_val_loss = float('inf')
 patience, trials = 10, 0
 save_path = 'vae.pt'
 
-for epoch in range(1, 6):
+for epoch in range(1, 101):
     model.train()
     total_loss = 0
     beta = cyclic_annealing_beta(epoch)
