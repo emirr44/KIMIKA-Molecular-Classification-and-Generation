@@ -146,7 +146,7 @@ Potential Saturation: Validation accuracy begins plateauing around epoch 4. Trai
 
 ![Confusion matrix - NN](fig/simple_nn_hiv_confusion_matrix.png)
 
-The Neural Network predicts inactive instances perfectly, while it completely fails on active ones.
+The Neural Network predicts inactive instances perfectly, while it completely fails on active ones which indicates the NN learned that all instances are inactive. This isn't a surprising outcome either since the ratio between active and inactive instances is 289/7935 ≈ 16:441.
 
 # Conclusion
 
