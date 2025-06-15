@@ -1,14 +1,18 @@
 ## Model Architecture
 
-Our classification model uses the GraphMVP architecture as the backbone. GraphMVP is a 2D GNN pre-trained with 3D molecular geometry. In practice, we implement a Graph Neural Network (e.g. a Graph Isomorphism Network or GraphConv) that takes each molecule’s graph (atoms + bonds) and outputs a fixed-size embedding vector. During fine tuning on BACE, we freeze this encoder and attach simple MLP head for binary classification. 
+Our classification model is based on a Graph Neural Network (GNN) architecture implemented using PyTorch Geometric. The backbone of the model is a message-passing GNN (e.g., GIN or GraphConv) that processes each molecule’s graph structure (atoms as nodes, bonds as edges) and encodes it into a fixed-size vector representation. On top of this, a graph-level prediction head (GNN_graphpred) performs binary classification.
 
+We support the use of pretrained GNN encoders. If a pretrained model is loaded, the encoder can optionally be frozen during fine-tuning to preserve learned features, while the classification head is trained on the BACE dataset.
 ## Training and Optimization Details
 
-As previously mentioned, GraphMVP encoder is fine tuned with the BACE training set. The graph data loader constructs PyTorch Geometric Data objects from SMILES (via RDKit). For optimization, we use binary cross-entropy loss on the classifier output. We train with the Adam optimizer (learning rate ~1e-4) for 10 epochs (as results were almost identical compared with training on 5 and 20 epochs), monitoring validation AUC. Dropout is applied in the MLP head for regularization. Class weights are used if needed to balance the 0/1 labels. We experiment with freezing vs. unfreezing the pre-trained layers; typically, Graph Neural Network was freezed to preserve previously learned patterns.
+The dataset is loaded from a CSV of SMILES strings and converted into graph representations via RDKit. We perform stratified splitting into training, validation, and test sets to preserve label distributions.
+
+The model is trained using the AdamW optimizer with a learning rate of 1e-3 and a small weight decay (1e-5). To prevent exploding gradients, gradient clipping with a max norm of 2.0 is applied. Mixed precision training (AMP) is optionally used for faster computation on GPUs.
+
+Training is guided by a binary cross-entropy loss on logits, with a learning rate scheduler (ReduceLROnPlateau) monitoring validation AUC. Dropout is applied in the GNN and MLP layers for regularization. Early stopping is used to prevent overfitting, based on stagnation in validation performance.
 
 ## Evaluation and Conclusion
 
-For simplicity, we measure ROC AUC (Receiver Operating Characteristic Area Under Curve) score on the held-out test set. For comparison, we include baseline models without pretrained weights. 
+We performe model evaluation on a held-out test set using ROC AUC and accuracy as key metrics. A confusion matrix and ROC curve are also plotted to visualize classification performance.
 
-
-The fine-tuned GraphMVP substantially outperforms baselines, demonstrating the benefit of pretraining. However, these metrics do not indicate that model works as intended. Modeling graph realtionships is quite difficult task, and because of limitations in data, model still struggles to adapt to given molecules and fully learns patterns.
+Our GNN-based model achieves decent results, which validates the effectiveness of message passing netowrks (GNNs) in molecular classification. While pretrained weights can improve performance, challenges remain due to the limited size and variability of the BACE dataset. Modeling complex molecular relationships continues to be a non-trivial task, and performance may stagnate without richer representations or data augmentation strategies.
