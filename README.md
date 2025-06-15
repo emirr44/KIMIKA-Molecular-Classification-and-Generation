@@ -6,9 +6,6 @@ apply deep learning for drug discovery; we predict β-secretase (BACE1), inhibit
 new compound structures (generation), and predict HIV activity on SMILES strings (classification). The classification task helps identify potential drug candidates, while the generative model allows de novo design of novel molecules. Screening vast chemical libraries is quite expensive, and
 AI offers cost-effective way to explore existing and even propose new molecules, learning patterns unseen by humans.
 
-The model was first tested on the HIV database consisted of 41127 SMILES strings which were labeled as *HIV active* (class 1) or *HIV inactive* (class 0).
-The dataset is very imbalanced, with 39684 of the instances being in class **0** while only 1443 are labeled **1**. The steps for training the model on hiv.csv dataset are listed in the src/classification/hiv_classification folder.
-
 ## Attention
 
 This project adapts and uses code from [Shengchao Liu's repository] (https://github.com/chao1224/GraphMVP), which is licensed under the MIT License. List of references can be found in text file in src file
@@ -18,6 +15,8 @@ This project adapts and uses code from [Shengchao Liu's repository] (https://git
 **Molecular Classification** - We aim to predict whether a given molecule inhibits human β-secretase 1 (BACE1), a key enzyme in Alzheimer’s disease plaque formation. Accurate classification models are important because they can prioritize lead compounds and reduce wet-lab 
 costs. The BACE dataset contains 1,513 compounds with binary activity labels (active/inactive). A major challenge is that chemical space is
 enormous (∼10^60 possible drug-like molecules), so learning from limited examples is hard. 
+The model was also tested on the HIV database containing 41127 SMILES strings which were labeled as *HIV active* (class 1) or *HIV inactive* (class 0).
+The dataset is very imbalanced, with 39684 of the instances being in class **0** while only 1443 are labeled **1**.
 
 **Molecular Generation** - We decided to use a variational autoencoder to map discrete molecules (SMILES strings) into a continuous "chemical" latent space. In this space, we can interpolate and optimize to generate new compounds. Continuous latent representations
 make it possible to apply gradient-based search over chemical space. Architecture of variational autoencoder makes it possible
