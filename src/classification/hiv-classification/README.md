@@ -2,7 +2,7 @@
 
 ## Step 1: Moving everything to Google Colab
 
-Because of the lack of resources to train it locally, the model was trained in Google Colab and `molecule_datasets.py`, `molecule_gnn_model.py`, and `model.py` were pasted into the notebook with `model.py` being pasted last as this file is the one which executes everything. 
+Because of the lack of resources to train it locally, the model was trained in Google Colab and `molecule_datasets.py`, `molecule_gnn_model.py` (the two files are from [here](https://github.com/chao1224/GraphMVP)), and `model.py` were pasted into the notebook with `model.py` being pasted last as this file is the one which executes everything. 
 
 In `model.py` the following two lines indicate that there are two specific classes (*GNN_graphpredComplete* and *GNNComplete*) that are needed from `molecule_gnn_model.py` and one function (*mol_to_graph_data_obj_simple*) from `molecule_datasets.py`
 ```
