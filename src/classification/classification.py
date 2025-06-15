@@ -1,6 +1,3 @@
-import sys
-sys.path.append(r"C:\Users\emirb\OneDrive\Documents\GitHub\GraphMVP\src_regression\models_complete_feature")
-
 import os
 import random
 import numpy as np
@@ -14,12 +11,11 @@ from sklearn.model_selection import StratifiedShuffleSplit
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 from tqdm import tqdm
-
+from sklearn.metrics import roc_curve
 from molecule_gnn_model import GNN, GNN_graphpred
 from molecule_datasets import MoleculeDataset
 from util import get_num_task
 from config import args
-
 
 def set_seed(seed: int = 42):
     random.seed(seed)
@@ -27,7 +23,6 @@ def set_seed(seed: int = 42):
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
-
 
 def train_one_epoch(model, device, loader, optimizer, criterion, scaler=None):
     model.train()
@@ -52,7 +47,6 @@ def train_one_epoch(model, device, loader, optimizer, criterion, scaler=None):
         losses.append(loss.item())
     return np.mean(losses)
 
-
 def evaluate(model, device, loader, return_prob=False):
     model.eval()
     all_true, all_probs = [], []
@@ -76,7 +70,6 @@ def evaluate(model, device, loader, return_prob=False):
     else:
         return auc, acc, y_true, y_pred
 
-
 def main():
     set_seed(args.runseed)
     device = torch.device(f"cuda:{args.device}" if torch.cuda.is_available() else "cpu")
@@ -84,11 +77,10 @@ def main():
     # Load data using original parameters
     num_tasks = get_num_task(args.dataset)
     dataset = MoleculeDataset(
-        "C:/Users/emirb/molecule_datasets/my_augmented", dataset="augmented.csv"
+        "C:/.../bace", dataset="bace.csv"
     )
     print(f"Loaded {len(dataset)} molecules from {args.dataset}")
 
-    # Prepare stratified splits based on args.frac_train, frac_valid, frac_test
     labels = np.array([int(((d.y.item() + 1) / 2)) for d in dataset])
     temp_size = args.frac_valid + args.frac_test
     sss1 = StratifiedShuffleSplit(n_splits=1, test_size=temp_size, random_state=args.runseed)
@@ -108,7 +100,6 @@ def main():
     val_loader = DataLoader(val_ds, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers)
     test_loader = DataLoader(test_ds, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers)
 
-    # Build model and optim
     backbone = GNN(
         num_layer=args.num_layer,
         emb_dim=args.emb_dim,
@@ -141,6 +132,7 @@ def main():
             if patience >= args.early_stopping_patience:
                 print("Early stopping triggered.")
                 break
+                
     model.load_state_dict(torch.load(args.save_model_file, map_location=torch.device('cpu')))
     test_auc, test_acc, y_true, y_pred, y_prob = evaluate(model, device, test_loader, return_prob=True)
     print(f"Test AUC: {test_auc:.4f}, Test ACC: {test_acc:.4f}")
@@ -151,9 +143,7 @@ def main():
     disp.plot(cmap=cmap)
     plt.title("Confusion Matrix (Test Set)")
     plt.show()
-
-    from sklearn.metrics import roc_curve
-
+    
     fpr, tpr, _ = roc_curve(y_true, y_prob)
     plt.figure()
     plt.plot(fpr, tpr, label=f"AUC = {test_auc:.2f}")
