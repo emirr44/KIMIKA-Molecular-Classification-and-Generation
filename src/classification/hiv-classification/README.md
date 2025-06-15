@@ -1,5 +1,12 @@
 # HIV Classification - how to train the model on the HIV dataset
 
+First and foremost, get the `hiv.csv` dataset from DeepChem by typing the following commands into the terminal:
+```
+wget -O hiv.csv https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/hiv.csv
+mkdir -p ./molecule_datasets/hiv/raw
+mv hiv.csv ./molecule_datasets/hiv/raw/hiv.csv
+```
+
 ## Step 1: Moving everything to Google Colab
 
 Because of the lack of resources to train it locally, the model was trained in Google Colab and `molecule_datasets.py`, `molecule_gnn_model.py` (the two files are from [here](https://github.com/chao1224/GraphMVP)), and `model.py` were pasted into the notebook with `model.py` being pasted last as this file is the one which executes everything. 
