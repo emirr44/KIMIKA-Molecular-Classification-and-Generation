@@ -80,7 +80,7 @@ Test accuracy: 0.8446
 
 ## HIV Classification
 
-As described in the README in src/classification/hiv-classification
+As described in the README in src/classification/hiv-classification, HIV database is trained on 2 classification task: random forest classifier and a simple neural network.
 
 ### Random Forest Classifier
 
@@ -118,6 +118,35 @@ The plot shows:
 ![Confusion matrix - Random Forest](fig/randomforest_hiv_confusion_matrix.png)
 
 This confusion matrix shows that more than 1/3 of the inactive HIV instances are incorrectly classified as well as the Random Forest having difficulties classifying  HIV active instances at all. However, it was easily anticipated that the active instances would ose a problem due to the imbalance in the dataset.
+
+Final Random Forest Classifier Report:
+|              |precision  |  recall | f1-score |  support|
+|--------------|-----------|----------|---------|----------|
+|    Negative   |    0.97   |   0.64   |   0.77  |    7935|
+|    Positive   |    0.04    |  0.44   |   0.08  |     289|
+|    accuracy   |            |         |   0.63  |    8224|
+|   macro avg    |   0.51   |   0.54   |   0.42   |   8224|
+|weighted avg    |   0.94   |   0.63   |   0.75   |   8224|
+
+### Neural Network Classifier
+
+![Loss - Random Forest](fig/simple_nn_hiv_loss.png)
+
+The parallel decrease suggests no severe overfitting. Small gap between curves means good generalization. Final losses: Training (~0.30) vs Validation (~0.35).
+
+The small divergence after epoch 6 suggests validation loss plateaus while training loss decreases.
+
+![Accuracy - NN](fig/simple_nn_hiv_accuracy.png)
+
+Strong Final Performance: Training accuracy reaches ~0.95; Validation accuracy peaks ~0.85-0.90. Both curves show steady improvement
+
+Healthy Learning Pattern: Parallel upward trends indicate proper learning. Small gap between curves suggests good generalization. No signs of severe overfitting
+
+Potential Saturation: Validation accuracy begins plateauing around epoch 4. Training accuracy continues improving slightly
+
+![Confusion matrix - NN](fig/simple_nn_hiv_confusion_matrix.png)
+
+The Neural Network predicts inactive instances perfectly, while it completely fails on active ones.
 
 # Conclusion
 
